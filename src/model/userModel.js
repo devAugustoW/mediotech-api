@@ -6,8 +6,7 @@ const UserSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password_hash: { type: String, required: true },
   userType: { type: String, enum: ['aluno', 'professor', 'coordenador'], required: true },
-	createdAt: { type: Date, default: Date.now, }	
-});
+}, { timestamps: true });
 
 
 UserSchema.pre('save', async function(next){

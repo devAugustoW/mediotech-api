@@ -8,7 +8,9 @@ class App{
 	constructor(){
 		this.server = express();
 
-		mongoose.connect(process.env.MONGO_URI);
+		mongoose.connect(process.env.MONGO_URI)
+			.then(() => console.log('Conectado ao MongoDB'))
+			.catch(err => console.log('Erro ao conectar ao MongoDB:', err));
 		
 		this.middleware();
 		this.routes();
@@ -16,9 +18,9 @@ class App{
 
 	middleware(){
 		this.server.use(cors({
-      origin: 'http://localhost:5173', // Permições requisições do seu frontend
-      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-      allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
+      origin: 'http://localhost:5173', 
+      methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+      allowedHeaders: ['Content-Type', 'Authorization'], 
     }));
 		
 		this.server.use(express.json());
