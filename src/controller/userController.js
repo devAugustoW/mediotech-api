@@ -134,24 +134,32 @@ class UserController{
 
 	// deleta um usuário
   async deleteUser(req, res) {
-    try {
-      // Verifica se o usuário autenticado é um coordenador
-      if (req.user.userType !== 'coordenador') {
-        return res.status(403).json({ error: 'Acesso negado. Apenas coordenadores podem deletar usuários.' });
-      }
-
-      const { id } = req.params;
-
-      const user = await User.findById(id);
-      if (!user) return res.status(404).json({ error: 'Usuário não encontrado.' });
-
-      await user.remove();
-      return res.status(200).json({ message: 'Usuário deletado com sucesso' });
-
-    } catch (error) {
-      res.status(500).json({ message: 'Erro no servidor', error: error.message });
-    }
-  }
+		try {
+			console.log('Iniciando deleção do usuário');
+			if (req.user.userType !== 'coordenador') {
+				console.log('Acesso negado: usuário não é coordenador');
+				return res.status(403).json({ error: 'Acesso negado. Apenas coordenadores podem deletar usuários.' });
+			}
+	
+			const { id } = req.params;
+			console.log(`Procurando usuário com ID: ${id}`);
+	
+			const user = await User.findById(id);
+			if (!user) {
+				console.log('Usuário não encontrado');
+				return res.status(404).json({ error: 'Usuário não encontrado.' });
+			}
+	
+			// Use findByIdAndDelete para remover o usuário
+			await User.findByIdAndDelete(id);
+			console.log('Usuário removido com sucesso');
+			return res.status(200).json({ message: 'Usuário deletado com sucesso' });
+	
+		} catch (error) {
+			console.error('Erro no servidor:', error);
+			res.status(500).json({ message: 'Erro no servidor', error: error.message });
+		}
+	}
 }
 
 export default new UserController();
