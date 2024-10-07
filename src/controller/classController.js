@@ -35,6 +35,7 @@ class classController {
     }
   }
 
+	
   // edita uma turma
   async updateClass(req, res) {
     try {

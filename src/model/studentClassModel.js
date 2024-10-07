@@ -8,7 +8,7 @@ const StudentClassSchema = new mongoose.Schema({
   },
   class: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Turma',
+    ref: 'Class',
     required: true,
   },
 }, {

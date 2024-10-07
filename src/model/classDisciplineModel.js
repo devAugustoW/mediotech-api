@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const ClassDisciplineSchema = new mongoose.Schema({
   class: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Turma',
+    ref: 'Class',
     required: true,
   },
   discipline: {
