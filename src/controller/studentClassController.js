@@ -1,11 +1,11 @@
 import StudentClass from '../model/studentClassModel';
 
 class StudentClassController {
-  // cria um novo relacionamento entre aluno e turma
   async store(req, res) {
     try {
       // Verifica se o usuário autenticado é um coordenador
       if (req.user.userType !== 'coordenador') {
+        console.log('Acesso negado: usuário não é coordenador');
         return res.status(403).json({ error: 'Acesso negado. Apenas coordenadores podem relacionar alunos a turmas.' });
       }
 
@@ -13,15 +13,16 @@ class StudentClassController {
 
       // cria o relacionamento
       const newStudentClass = await StudentClass.create({ student, class: classId });
+      console.log('Relacionamento criado com sucesso:', newStudentClass);
 
       return res.status(201).json({ message: 'Relacionamento criado com sucesso', newStudentClass });
 
     } catch (error) {
+      console.error('Erro ao criar relacionamento entre aluno e turma:', error);
       res.status(500).json({ message: 'Erro no servidor', error: error.message });
     }
   }
 
-  // resgata um relacionamento específico entre aluno e turma
   async getStudentClass(req, res) {
     try {
       console.log('Iniciando busca de relacionamento entre aluno e turma');
@@ -51,7 +52,7 @@ class StudentClassController {
       }
 
     } catch (error) {
-      console.log('Erro no servidor:', error.message);
+      console.error('Erro ao buscar relacionamento entre aluno e turma:', error);
       res.status(500).json({ message: 'Erro no servidor', error: error.message });
     }
   }
@@ -86,7 +87,6 @@ class StudentClassController {
       res.status(500).json({ message: 'Erro no servidor', error: error.message });
     }
   }
-
 
   // deleta um relacionamento entre aluno e turma
   async deleteStudentClass(req, res) {

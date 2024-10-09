@@ -5,7 +5,7 @@ const AnnouncementSchema = new mongoose.Schema({
   content: { type: String, required: true, },
   targetClasses: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Turma',
+    ref: 'Class',
   }],
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,

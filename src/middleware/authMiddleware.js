@@ -14,20 +14,16 @@ const authMiddleware = async (req, res, next) => {
 	
 	try {
 		const decoded = jwt.verify(token, JWT_SECRET);
-		console.log('Token decodificado:', decoded);
 		const user = await userModel.findById(decoded.id);
-		if (!user) {
-			console.log('Usuário não encontrado.');
-			return res.status(401).json({ error: 'Usuário não encontrado.' });
-		}
-
+		
+		if (!user) res.status(401).json({ error: 'Usuário não encontrado.' });
+		
 		req.userId = user._id;
 		req.user = user;
 
 		next();
 
 	} catch (error) {
-		console.log('Erro ao verificar o token:', error.message);
 		return res.status(401).json({ error: 'Token inválido.' });
 	}
 }

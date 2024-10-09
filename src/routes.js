@@ -10,9 +10,9 @@ import conceptController from './controller/conceptController';
 import authMiddleware from './middleware/authMiddleware';
 
 const routes = new Router();
+
 routes.post('/createUser', userController.store);
 routes.post('/login', userController.login);
-
 
 // criação de usuário por coordenador
 routes.post('/createUserByCoordinator', authMiddleware, userController.storeByCoordinator);
@@ -47,7 +47,7 @@ routes.put('/editClassDiscipline/:id', authMiddleware, classDisciplineController
 routes.delete('/deleteClassDiscipline/:id', authMiddleware, classDisciplineController.deleteClassDiscipline);
 
 
-// relacionar alunos a turmas por coordenador
+// relacionar alunos/turmas por coordenador
 routes.post('/studentToClass', authMiddleware, studentClassController.store);
 routes.get('/studentClass', authMiddleware, studentClassController.getStudentClass);
 routes.put('/editStudentClass/:id', authMiddleware, studentClassController.updateStudentClass);
@@ -56,7 +56,11 @@ routes.delete('/deleteStudentClass/:id', authMiddleware, studentClassController.
 
 
 // criação de anúncios por coordenador ou professor
-routes.post('/createAnnouncement', authMiddleware, announcementController.store);
+routes.post('/announcements', authMiddleware, announcementController.store); 
+routes.get('/announcements', authMiddleware, announcementController.getAllAnnouncements); 
+routes.get('/announcements/:id', authMiddleware, announcementController.getAnnouncementById); 
+routes.put('/announcements/:id', authMiddleware, announcementController.updateAnnouncement);
+routes.delete('/announcements/:id', authMiddleware, announcementController.deleteAnnouncement); 
 
 
 // cadastrar conceitos por professor

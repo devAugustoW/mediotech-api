@@ -2,7 +2,6 @@ import ClassDiscipline from '../model/classDisciplineModel';
 
 
 class ClassDisciplineController {
-
   // cria um novo relacionamento entre turma e disciplina
   async store(req, res) {
     try {
