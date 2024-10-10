@@ -57,6 +57,14 @@ routes.get('/announcements/:id', authMiddleware, announcementController.getAnnou
 routes.put('/announcements/:id', authMiddleware, announcementController.updateAnnouncement);
 routes.delete('/announcements/:id', authMiddleware, announcementController.deleteAnnouncement); 
 
+
+// Visualização de conceitos pelo coordenador
+routes.get('/classes-with-disciplines', authMiddleware, classController.getClassesWithDisciplines);
+routes.get('/discipline-students-concepts/:disciplineId', authMiddleware, classController.getDisciplineStudentsAndConcepts);
+routes.get('/discipline-students/:disciplineId', authMiddleware, conceptController.getDisciplineStudentsAndGrades);
+
+
+
 // rotas do professor
 // buscar turmas e disciplinas vinculadas ao professor
 routes.get('/teacher/classes-and-disciplines', authMiddleware, userController.getTeacherClassesAndDisciplines);
@@ -67,7 +75,6 @@ routes.get('/teacher/class-students/:classId', authMiddleware, userController.ge
 // Adicione esta linha junto com as outras rotas do professor
 routes.get('/teacher/class-students-concepts/:classId', authMiddleware, userController.getStudentsAndConceptsByClass);
 routes.post('/teacher/add-concept', authMiddleware, conceptController.store);
-
 
 
 // cadastrar conceitos por professor
