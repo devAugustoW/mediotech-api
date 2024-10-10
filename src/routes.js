@@ -64,14 +64,15 @@ routes.get('/teacher/classes-and-disciplines', authMiddleware, userController.ge
 routes.get('/teacher/students-by-discipline/:disciplineId', authMiddleware, userController.getStudentsByDiscipline);
 routes.get('/teacher/concepts-by-discipline/:disciplineId', authMiddleware, conceptController.getConceptsByDiscipline);
 routes.get('/teacher/class-students/:classId', authMiddleware, userController.getStudentsByClass)
+// Adicione esta linha junto com as outras rotas do professor
+routes.get('/teacher/class-students-concepts/:classId', authMiddleware, userController.getStudentsAndConceptsByClass);
+routes.post('/teacher/add-concept', authMiddleware, conceptController.store);
 
 
 
 // cadastrar conceitos por professor
 routes.post('/concept', authMiddleware, conceptController.store);
-// routes.get('/concepts', authMiddleware, conceptController.getAllConcepts);
-// routes.get('/concepts/:id', authMiddleware, conceptController.getConceptById);
-// routes.put('/concepts/:id', authMiddleware, conceptController.updateConcept);
-// routes.delete('/concepts/:id', authMiddleware, conceptController.deleteConcept);
+routes.put('/teacher/edit-concept/:studentId', authMiddleware, conceptController.update);
+routes.delete('/teacher/delete-concept/:studentId/:disciplineId', authMiddleware, conceptController.delete);
 
 export default routes;

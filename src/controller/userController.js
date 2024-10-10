@@ -5,7 +5,8 @@ import User from "../model/userModel";
 import TeacherDiscipline from '../model/teacherDisciplineModel.js';
 import ClassDiscipline from '../model/classDisciplineModel.js';
 import StudentClass from '../model/studentClassModel.js';
-
+import Concept from '../model/conceptModel.js';
+import conceptController from './conceptController.js';
 
 dotenv.config();
 
@@ -261,6 +262,46 @@ class UserController {
 		} catch (error) {
 			console.error('Erro ao buscar alunos da turma:', error);
 			res.status(500).json({ message: 'Erro ao buscar alunos', error: error.message });
+		}
+	}
+
+	async getStudentsAndConceptsByClass(req, res) {
+		try {
+			const { classId } = req.params;
+			const teacherId = req.user._id;
+	
+			// Verificar se o professor está associado à turma
+			const teacherDisciplines = await TeacherDiscipline.find({ teacher: teacherId });
+			const classDiscipline = await ClassDiscipline.findOne({
+				class: classId,
+				discipline: { $in: teacherDisciplines.map(td => td.discipline) }
+			});
+	
+			if (!classDiscipline) {
+				return res.status(403).json({ message: 'Você não tem permissão para acessar esta turma.' });
+			}
+	
+			// Buscar os alunos da turma
+			const studentClasses = await StudentClass.find({ class: classId }).populate('student');
+	
+			// Buscar os conceitos dos alunos
+			const studentsWithConcepts = await Promise.all(studentClasses.map(async (sc) => {
+				const conceptDoc = await Concept.findOne({ 
+					student: sc.student._id, 
+					discipline: classDiscipline.discipline 
+				});
+	
+				return {
+					_id: sc.student._id,
+					name: sc.student.name,
+					concept: conceptDoc ? conceptDoc.concept : 'Não avaliado'
+				};
+			}));
+	
+			res.json(studentsWithConcepts);
+		} catch (error) {
+			console.error('Erro ao buscar alunos e conceitos da turma:', error);
+			res.status(500).json({ message: 'Erro ao buscar alunos e conceitos', error: error.message });
 		}
 	}
 }
